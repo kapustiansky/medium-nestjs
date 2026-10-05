@@ -1,7 +1,7 @@
 import type { ConfigService } from '@nestjs/config';
 import type { DataSourceOptions } from 'typeorm';
-// import { dirname } from 'node:path';
-// import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Только настройки PostgreSQL.
 type PostgresOptions = Extract<
@@ -26,6 +26,7 @@ export function createDatabaseConfig(
     password: config.getOrThrow<string>('DB_PASSWORD'),
     database: config.getOrThrow<string>('DB_DATABASE'),
     synchronize: false,
-    // entities: [dirname(fileURLToPath(import.meta.url)) + '/../**/*.entity{.ts,.js}'],
+    entities: [dirname(fileURLToPath(import.meta.url)) + '/../**/*.entity{.ts,.js}'],
+    migrations: [dirname(fileURLToPath(import.meta.url)) + '/../migrations/**/*{.ts,.js}'],
   };
 }

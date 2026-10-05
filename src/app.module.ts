@@ -6,6 +6,7 @@ import { TagModule } from '@app/tag/tag.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { createDatabaseConfig } from '@app/config/database.config.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './user/user.module.js';
 
 // export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -30,6 +31,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
     TagModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
