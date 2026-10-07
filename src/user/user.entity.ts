@@ -15,6 +15,9 @@ export class UserEntity {
   bio: string;
 
   @Column({ default: '' })
+  username: string;
+
+  @Column({ default: '' })
   image: string;
 
   @Column()
