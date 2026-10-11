@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity.js';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PasswordHasher } from '@nestjs/authentication';
 
 @Module({
   imports: [
@@ -19,6 +20,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    {
+      provide: PasswordHasher,
+      useFactory: () => new PasswordHasher(),
+    },
+  ],
 })
 export class UserModule {}

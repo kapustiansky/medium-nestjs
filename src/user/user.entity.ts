@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
-import { PasswordHasher } from '@nestjs/authentication';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+// import { PasswordHasher } from '@nestjs/authentication';
 
-const hasher = new PasswordHasher();
+// const hasher = new PasswordHasher();
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -20,11 +20,11 @@ export class UserEntity {
   @Column({ default: '' })
   image: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await hasher.hash(this.password);
-  }
+  //   @BeforeInsert()
+  //   async hashPassword() {
+  //     this.password = await hasher.hash(this.password);
+  //   }
 }
