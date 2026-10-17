@@ -4,7 +4,7 @@ import { UserEntity } from './user.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { IUserResponse } from './types/userResponce.interface.js';
+import { IUserResponse } from './types/userResponse.interface.js';
 import { LoginUserDto } from './dto/loginUserDto.js';
 import { PasswordHasher } from '@nestjs/authentication';
 
@@ -16,6 +16,7 @@ export class UserService {
     private readonly jwtService: JwtService,
     private readonly passwordHasher: PasswordHasher,
   ) {}
+
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const userByEmail = await this.userRepository.findOne({
       where: { email: createUserDto.email },
@@ -87,5 +88,9 @@ export class UserService {
     // или throw new UnauthorizedException('Неверный email или пароль');
 
     return userByEmail;
+  }
+
+  getUserById(id: number): Promise<UserEntity | null> {
+    return this.userRepository.findOne({ where: { id } });
   }
 }

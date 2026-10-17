@@ -6,6 +6,7 @@ import { UserEntity } from './user.entity.js';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PasswordHasher } from '@nestjs/authentication';
+import { AuthGuard } from './guards/auth.guard.js';
 
 @Module({
   imports: [
@@ -26,6 +27,8 @@ import { PasswordHasher } from '@nestjs/authentication';
       provide: PasswordHasher,
       useFactory: () => new PasswordHasher(),
     },
+    AuthGuard,
   ],
+  exports: [UserService],
 })
 export class UserModule {}

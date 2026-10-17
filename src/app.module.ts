@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 // import { createObserveModule } from '@nestjs/observe';
 import { AppController } from '@app/app.controller.js';
 import { AppService } from '@app/app.service.js';
@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { createDatabaseConfig } from '@app/config/database.config.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module.js';
+import { AuthMiddleware } from './user/middlewares/auth.middleware.js';
 
 // export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -36,4 +37,11 @@ import { UserModule } from './user/user.module.js';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}
