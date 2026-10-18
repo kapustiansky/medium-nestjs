@@ -3,6 +3,7 @@ import type { NextFunction, Response } from 'express';
 import { IExpressRequest } from '@app/types/expressRequest.interface.js';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user.service.js';
+import { UserEntity } from '../user.entity.js';
 
 @Injectable()
 export class AuthMiddleware {
@@ -20,13 +21,27 @@ export class AuthMiddleware {
 
     const token = req.headers.authorization.split(' ')[1];
 
+    let user: {
+      id: UserEntity['id'];
+      email: UserEntity['email'];
+      username: UserEntity['username'];
+    };
     try {
-      const user = this.jwtService.verify(token, {
+      user = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
       });
+    } catch (err) {
+      req.user = null;
+      next();
+      return;
+    }
+
+    try {
       req.user = await this.userService.getUserById(user.id);
     } catch (err) {
       req.user = null;
+      next(err);
+      return;
     }
 
     next();

@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IUserResponse } from './types/userResponse.interface.js';
 import { LoginUserDto } from './dto/loginUserDto.js';
 import { PasswordHasher } from '@nestjs/authentication';
+import { UpdateUserDto } from './dto/updateUser.dto.js';
 
 @Injectable()
 export class UserService {
@@ -92,5 +93,48 @@ export class UserService {
 
   getUserById(id: number): Promise<UserEntity | null> {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  async updateUser(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.getUserById(id);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    if (updateUserDto.email && updateUserDto.email !== user.email) {
+      const userByEmail = await this.userRepository.findOne({
+        where: { email: updateUserDto.email },
+      });
+      if (userByEmail) {
+        throw new HttpException(
+          'Email is already taken',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+
+    if (updateUserDto.username && updateUserDto.username !== user.username) {
+      const userByUsername = await this.userRepository.findOne({
+        where: { username: updateUserDto.username },
+      });
+      if (userByUsername) {
+        throw new HttpException(
+          'Username is already taken',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+
+    if (updateUserDto.password) {
+      Object.assign(updateUserDto, {
+        password: await this.passwordHasher.hash(updateUserDto.password),
+      });
+    }
+
+    Object.assign(user, updateUserDto, { id });
+    return await this.userRepository.save(user);
   }
 }
