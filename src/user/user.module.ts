@@ -29,6 +29,6 @@ import { AuthGuard } from './guards/auth.guard.js';
     },
     AuthGuard,
   ],
-  exports: [UserService],
+  exports: [UserService, JwtModule],
 })
 export class UserModule {}
