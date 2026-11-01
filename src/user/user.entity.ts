@@ -1,7 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-// import { PasswordHasher } from '@nestjs/authentication';
-
-// const hasher = new PasswordHasher();
+import { ArticleEntity } from '@app/article/article.entity.js';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -23,8 +21,6 @@ export class UserEntity {
   @Column({ select: false })
   password: string;
 
-  //   @BeforeInsert()
-  //   async hashPassword() {
-  //     this.password = await hasher.hash(this.password);
-  //   }
+  @OneToMany(() => ArticleEntity, (article) => article.author)
+  articles: ArticleEntity[];
 }
