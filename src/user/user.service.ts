@@ -134,7 +134,12 @@ export class UserService {
       });
     }
 
-    Object.assign(user, updateUserDto, { id });
+    for (const field of ['email', 'username', 'password', 'bio', 'image'] as const) {
+      const value = updateUserDto[field];
+      if (value !== undefined) {
+        user[field] = value;
+      }
+    }
     return await this.userRepository.save(user);
   }
 }

@@ -8,6 +8,7 @@ import { createDatabaseConfig } from '@app/config/database.config.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module.js';
 import { AuthMiddleware } from './user/middlewares/auth.middleware.js';
+import { ArticleModule } from './article/article.module.js';
 
 // export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -33,6 +34,7 @@ import { AuthMiddleware } from './user/middlewares/auth.middleware.js';
     }),
     TagModule,
     UserModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
