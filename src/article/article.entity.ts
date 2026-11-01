@@ -4,8 +4,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeUpdate,
-  OneToMany,
   ManyToOne,
+  type Relation,
 } from 'typeorm';
 
 @Entity({ name: 'articles' })
@@ -46,5 +46,5 @@ export class ArticleEntity {
   }
 
   @ManyToOne(() => UserEntity, (user) => user.articles)
-  author: UserEntity;
+  author: Relation<UserEntity>;
 }
